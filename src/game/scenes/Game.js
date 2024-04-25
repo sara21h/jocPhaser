@@ -15,6 +15,7 @@ export class Game extends Scene {
         this.isOnGround = true;
         this.hasJumped = false;
         this.jumpSpeed = 60; // Ajusta la velocidad de salto
+        this.canJump = true; // Nueva variable para controlar el tiempo de espera antes de saltar
     }
 
     update() {
@@ -28,7 +29,7 @@ export class Game extends Scene {
         }
 
         // Comprueba si el jugador está en el suelo y permite el salto
-        if (this.cursors.up.isDown && this.player.y > margin && this.isOnGround && !this.hasJumped) {
+        if (this.cursors.up.isDown && this.player.y > margin && this.isOnGround && !this.hasJumped && this.canJump) {
             // Realiza el salto
             this.jump();
         }
@@ -41,18 +42,22 @@ export class Game extends Scene {
             this.isOnGround = true;
             this.hasJumped = false;
         }
-
-        //this.changeScene();
     }
 
     jump() {
         this.player.y -= this.jumpSpeed; // Hace que el jugador suba más rápido
         this.hasJumped = true;
         this.isOnGround = false;
+        this.canJump = false; // El jugador no puede saltar inmediatamente después de saltar
 
         // Hace que el jugador caiga después de un corto período de tiempo
-        this.time.delayedCall(250, () => {
+        this.time.delayedCall(600, () => {
             this.fall();
+        });
+
+        // Agrega un retraso antes de que el jugador pueda saltar de nuevo
+        this.time.delayedCall(1000, () => { // Cambia 1000 a la cantidad de milisegundos que quieras esperar
+            this.canJump = true;
         });
     }
 
