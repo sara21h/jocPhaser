@@ -8,11 +8,11 @@ export class Game extends Scene {
 
     create() {
         // Crea un TileSprite con el tamaño del mundo del juego
-        this.bg = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'bgJoc');
+        this.bg = this.add.tileSprite(0, 0, this.scale.width * 10, this.scale.height, 'bgJoc');
         this.bg.setOrigin(0, 0); // Asegúrate de que el origen esté en la esquina superior izquierda
 
         // Añade el jugador después del fondo
-        this.player = this.add.image(500, 600, 'personatge').setScale(0.3);
+        this.player = this.add.image(500, 500, 'personatge').setScale(0.3);
         this.player.setOrigin(0, 0);
         this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -23,7 +23,7 @@ export class Game extends Scene {
         this.canJump = true; // Nueva variable para controlar el tiempo de espera antes de saltar
 
         // Configura la cámara para seguir al jugador
-        this.cameras.main.startFollow(this.player, true, 0.05, 0.01, 0, 200);
+        this.cameras.main.startFollow(this.player, true, 0.05, 0.01, 0, 100);
         //this.cameras.main.setDeadzone(this.cameras.main.width / 2, 0);
     }
 
@@ -34,7 +34,7 @@ export class Game extends Scene {
 
         if (this.cursors.left.isDown && this.player.x - playerWidth / 2 > 0) { // Asegúrate de que el jugador no se salga por la izquierda
             this.player.x -= speed;
-        } else if (this.cursors.right.isDown && this.player.x + playerWidth / 2 < this.cameras.main.width - margin) { // Asegúrate de que el jugador no se salga por la derecha
+        } else if (this.cursors.right.isDown && this.player.x + playerWidth / 2 < this.bg.width) { // Asegúrate de que el jugador no se salga por la derecha
             this.player.x += speed;
         }
 
@@ -45,7 +45,7 @@ export class Game extends Scene {
         }
 
         // Comprueba si el jugador está en el aire y permite que vuelva a tocar el suelo
-        if (this.player.y < 600) { // Cambia 600 por la posición y del suelo
+        if (this.player.y < 500) { // Cambia 600 por la posición y del suelo
             this.isOnGround = false;
         } else {
             // Marca que el jugador está en el suelo y permite un nuevo salto
