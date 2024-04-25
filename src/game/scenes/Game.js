@@ -16,6 +16,10 @@ export class Game extends Scene {
         this.hasJumped = false;
         this.jumpSpeed = 60; // Ajusta la velocidad de salto
         this.canJump = true; // Nueva variable para controlar el tiempo de espera antes de saltar
+
+        // Configura la cámara para seguir al jugador
+        this.cameras.main.startFollow(this.player, true, 0.05, 0.01, 0, 200);
+        //this.cameras.main.setDeadzone(this.cameras.main.width / 2, 0);
     }
 
     update() {
@@ -24,7 +28,7 @@ export class Game extends Scene {
 
         if (this.cursors.left.isDown && this.player.x > margin) {
             this.player.x -= speed;
-        } else if (this.cursors.right.isDown && this.player.x < this.cameras.main.width - margin) {
+        } else if (this.cursors.right.isDown) {
             this.player.x += speed;
         }
 
