@@ -7,8 +7,13 @@ export class Game extends Scene {
     }
 
     create() {
-        this.add.image(512, 384, 'bgJoc').setAlpha(0.5);
+        // Crea un TileSprite con el tamaño del mundo del juego
+        this.bg = this.add.tileSprite(0, 0, this.scale.width, this.scale.height, 'bgJoc');
+        this.bg.setOrigin(0, 0); // Asegúrate de que el origen esté en la esquina superior izquierda
+
+        // Añade el jugador después del fondo
         this.player = this.add.image(500, 600, 'personatge').setScale(0.3);
+        this.player.setOrigin(0, 0);
         this.cursors = this.input.keyboard.createCursorKeys();
 
         // Declara las variables fuera del método create()
@@ -25,10 +30,11 @@ export class Game extends Scene {
     update() {
         const speed = 5;
         const margin = 50;
+        const playerWidth = this.player.displayWidth; // Obtiene el ancho del jugador
 
-        if (this.cursors.left.isDown && this.player.x > margin) {
+        if (this.cursors.left.isDown && this.player.x - playerWidth / 2 > 0) { // Asegúrate de que el jugador no se salga por la izquierda
             this.player.x -= speed;
-        } else if (this.cursors.right.isDown) {
+        } else if (this.cursors.right.isDown && this.player.x + playerWidth / 2 < this.cameras.main.width - margin) { // Asegúrate de que el jugador no se salga por la derecha
             this.player.x += speed;
         }
 
@@ -47,6 +53,7 @@ export class Game extends Scene {
             this.hasJumped = false;
         }
     }
+
 
     jump() {
         this.player.y -= this.jumpSpeed; // Hace que el jugador suba más rápido
