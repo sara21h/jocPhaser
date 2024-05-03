@@ -8,7 +8,7 @@ export class Game extends Scene {
 
     create() {
         // Crea un TileSprite con el tamaño del mundo del juego
-        this.bg = this.add.tileSprite(0, 0, this.scale.width * 10, this.scale.height, 'bgJoc');
+        this.bg = this.add.tileSprite(0, 0, this.scale.width * 2, this.scale.height, 'bgJoc');
         this.bg.setOrigin(0, 0); // Asegúrate de que el origen esté en la esquina superior izquierda
 
         // Añade el jugador después del fondo
@@ -25,6 +25,18 @@ export class Game extends Scene {
         // Configura la cámara para seguir al jugador
         this.cameras.main.startFollow(this.player, true, 0.05, 0.01, 0, 100);
         //this.cameras.main.setDeadzone(this.cameras.main.width / 2, 0);
+        for (let i = 0; i < 6; i++) {
+            let x = Phaser.Math.Between(this.bg.x, this.bg.x + this.bg.width); // Posición horizontal aleatoria dentro del área del fondo
+            let y = Phaser.Math.Between(0, 1) === 0 ? 570 : 500;
+
+            let spaceFactor = 1.2; // Puedes ajustar este valor según la cantidad de espacio que desees
+            x *= spaceFactor;
+            
+            let star = this.add.image(x, y, 'estrella').setScale(0.2);
+            star.setOrigin(0.5, 0.5);
+        }
+
+
     }
 
     update() {
@@ -32,9 +44,9 @@ export class Game extends Scene {
         const margin = 50;
         const playerWidth = this.player.displayWidth; // Obtiene el ancho del jugador
 
-        if (this.cursors.left.isDown && this.player.x - playerWidth / 2 > 0) { // Asegúrate de que el jugador no se salga por la izquierda
+        if (this.cursors.left.isDown && this.player.x - playerWidth / 20 > margin) { // Asegúrate de que el jugador no se salga por la izquierda
             this.player.x -= speed;
-        } else if (this.cursors.right.isDown && this.player.x + playerWidth / 2 < this.bg.width) { // Asegúrate de que el jugador no se salga por la derecha
+        } else if (this.cursors.right.isDown && this.player.x + playerWidth / 2 < this.bg.width - margin) { // Asegúrate de que el jugador no se salga por la derecha
             this.player.x += speed;
         }
 
@@ -52,6 +64,12 @@ export class Game extends Scene {
             this.isOnGround = true;
             this.hasJumped = false;
         }
+        // Ajusta la cámara para que deje de seguir al jugador cuando ya no haya más fondo
+        //if (this.player.x + this.cameras.main.width / 2 > this.bg.width || this.player.x - this.cameras.main.width / 2 < 0) {
+        //    this.cameras.main.stopFollow();
+        //} else {
+        //    this.cameras.main.startFollow(this.player, true, 0.05, 0.01, 0, 100);
+        //}
     }
 
 
