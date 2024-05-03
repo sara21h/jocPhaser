@@ -24,9 +24,13 @@ export class Game extends Scene {
 
         // Configura la cámara para seguir al jugador
         this.cameras.main.startFollow(this.player, true, 0.05, 0.01, 0, 100);
+
+        const minX = this.player.displayWidth / 2 + 50; // La mitad del ancho del jugador desde el borde izquierdo
+        const maxX = this.bg.width - this.player.displayWidth / 2 - 300; // El ancho del fondo menos la mitad del ancho del jugador desde el borde derecho
+        
         //this.cameras.main.setDeadzone(this.cameras.main.width / 2, 0);
-        for (let i = 0; i < 6; i++) {
-            let x = Phaser.Math.Between(this.bg.x, this.bg.x + this.bg.width); // Posición horizontal aleatoria dentro del área del fondo
+        for (let i = 0; i < 30; i++) {
+            let x = Phaser.Math.Between(minX, maxX); // Posición horizontal aleatoria dentro del área del fondo
             let y = Phaser.Math.Between(0, 1) === 0 ? 570 : 500;
 
             let spaceFactor = 1.2; // Puedes ajustar este valor según la cantidad de espacio que desees
