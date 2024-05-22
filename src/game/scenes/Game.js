@@ -74,16 +74,13 @@ export class Game extends Scene {
                 // Realiza el salto
                 this.jump();
             }
-            for (let i = 0; i < this.stars.length; i++) {
-                let star = this.stars[i];
-                if (distance < 100) { // Puedes ajustar este valor
-                    // Elimina la estrella
-                    star.destroy();
-                    // Elimina la estrella del array
-                    this.stars.splice(i, 1);
-                    // Reduce el índice ya que hemos eliminado un elemento del array
-                    i--;
-                }
+            if (distance < 100) { // Puedes ajustar este valor
+                // Elimina la estrella
+                star.destroy();
+                // Elimina la estrella del array
+                this.stars.splice(i, 1);
+                // Reduce el índice ya que hemos eliminado un elemento del array
+                i--;
 
                 // Comprueba si el jugador está en el aire y permite que vuelva a tocar el suelo
                 if (this.player.y < 500) { // Cambia 600 por la posición y del suelo
