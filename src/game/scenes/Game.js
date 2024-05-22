@@ -10,7 +10,7 @@ export class Game extends Scene {
         this.bg = this.add.tileSprite(0, 0, this.scale.width * 2, this.scale.height, 'bgJoc');
         this.bg.setOrigin(0, 0); // Asegúrate de que el origen esté en la esquina superior izquierda
         // Añade el jugador después del fondo
-        this.player = this.add.image(500, 500, 'personatge').setScale(0.3);
+        this.player = this.add.image(90, 500, 'personatge').setScale(0.3);
         this.player.setOrigin(0, 0);
         this.cursors = this.input.keyboard.createCursorKeys();
         // Declara las variables fuera del método create()
@@ -29,7 +29,7 @@ export class Game extends Scene {
         //this.cameras.main.setDeadzone(this.cameras.main.width / 2, 0);
         for (let i = 0; i < 6; i++) {
             let x = Phaser.Math.Between(minX, maxX);
-            let y = Phaser.Math.Between(0, 1) === 0 ? 570 : 500;
+            let y = Phaser.Math.Between(0, 1) === 0 ? 475 : 570;
             let star = this.add.image(x, y, 'estrella').setScale(0.2);
             star.setOrigin(0.5, 0.5);
 
@@ -64,9 +64,16 @@ export class Game extends Scene {
             }
             for (let i = 0; i < this.stars.length; i++) {
                 let star = this.stars[i];
-                // Calcula la distancia entre el jugador y la estrella
-                const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, star.x, star.y);
-                if (distance < 100) { // Puedes ajustar este valor
+
+                // Calcula la distancia entre el centro del jugador y el centro de la estrella
+                const distanceX = Math.abs(this.player.x + this.player.displayWidth / 2 - (star.x + star.displayWidth / 2));
+                const distanceY = Math.abs(this.player.y + this.player.displayHeight / 2 - (star.y + star.displayHeight / 2));
+
+                // Calcula la distancia mínima permitida para eliminar la estrella
+                const minDistance = 50; // Puedes ajustar este valor según sea necesario
+
+                // Comprueba si la distancia es menor que la distancia mínima permitida
+                if (distanceX < minDistance && distanceY < minDistance) {
                     // Elimina la estrella
                     star.destroy();
                     // Elimina la estrella del array
