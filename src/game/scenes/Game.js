@@ -172,6 +172,12 @@ export class Game extends Scene {
         collectFoc() {
             this.life--; // Incrementa la puntuación
             this.lifeText.setText('Vida: ' + this.life); // Actualiza el texto de la puntuación
+            this.player.setTint(0xff0000);
+
+            // Después de 1 segundo, remueve el efecto rojo
+            this.time.delayedCall(1000, () => {
+                this.player.clearTint();
+            });
             if (this.life === 0) {
                 this.changeScene();
             }
