@@ -12,6 +12,21 @@ export class Game extends Scene {
             this.life = 3;
             this.timeLeft = 20;
             this.bg = this.add.tileSprite(50, 0, this.scale.width * 4, this.scale.height, 'bgJoc');
+
+            // Temporizador para cambiar el fondo cada cierto tiempo
+            this.time.addEvent({
+                delay: 5000, // Cambia cada 5 segundos (5000 milisegundos)
+                loop: true,
+                callback: () => {
+                    // Elige una imagen de fondo aleatoria entre 'bgJoc', 'bg2' y 'bg3'
+                    const backgrounds = ['bgJoc', 'bg2', 'bg3'];
+                    const randomIndex = Phaser.Math.Between(0, backgrounds.length - 1);
+                    const randomBackground = backgrounds[randomIndex];
+
+                    // Cambia el fondo a la imagen aleatoria
+                    this.bg.setTexture(randomBackground);
+                }
+            });
             this.scoreText = this.add.text(70, 150, 'Puntuació:' + this.score);
             this.timeText = this.add.text(this.scale.width - 120, 100, 'Temps: ' + this.timeLeft); // Ajusta la posición del tiempo
             this.lifeText = this.add.text(70, 100, 'Vida:' + this.life);
