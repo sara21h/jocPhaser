@@ -1,10 +1,11 @@
 import { Boot } from './scenes/Boot';
 import { Game } from './scenes/Game';
-import { Win } from './scenes/Game';
 import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
 import Phaser from 'phaser';
 import { Preloader } from './scenes/Preloader';
+import { Win } from './scenes/Win';
+import { Info } from './scenes/Info';
 
 
 // Find out more information about the Game Config at:
@@ -21,7 +22,8 @@ const config = {
         MainMenu,
         Game,
         GameOver,
-        Win
+        Win,
+        Info
     ]
 };
 

@@ -9,8 +9,8 @@ export class Game extends Scene {
             // Crea un TileSprite con el tamaño del mundo del juego
             this.score = 0;
             this.life = 3;
-            this.timeLeft = 5;
-            this.bg = this.add.tileSprite(0, 0, this.scale.width * 2, this.scale.height, 'bgJoc');
+            this.timeLeft = 20;
+            this.bg = this.add.tileSprite(0, 0, this.scale.width * 4, this.scale.height, 'bgJoc');
             this.scoreText = this.add.text(20, 150, 'Puntuació:' + this.score);
             this.timeText = this.add.text(this.scale.width - 120, 100, 'Temps: ' + this.timeLeft); // Ajusta la posición del tiempo
             this.lifeText = this.add.text(20, 100, 'Vida:' + this.life);
@@ -45,7 +45,7 @@ export class Game extends Scene {
             this.stars = [];
     
             //this.cameras.main.setDeadzone(this.cameras.main.width / 2, 0);
-            for (let i = 0; i < 6; i++) {
+            for (let i = 0; i < 10; i++) {
                 let x = Phaser.Math.Between(minX, maxX);
                 let y = Phaser.Math.Between(0, 1) === 0 ? 475 : 570;
                 let star = this.add.image(x, y, 'estrella').setScale(0.2);
@@ -82,12 +82,12 @@ export class Game extends Scene {
         }
         updateTimer() {
             this.timeLeft--;
-            this.timeText.setText('Tiempo: ' + this.timeLeft);
+            this.timeText.setText('Temps: ' + this.timeLeft);
     
-            if (this.timeLeft <= 0 && this.score < 4) {
+            if (this.timeLeft <= 0 && this.score <= 9) {
                 this.changeScene();
             }
-            else if (this.timeLeft <= 0 && this.score >= 4) {
+            else if (this.timeLeft <= 0 && this.score >= 10) {
                 this.scene.start('Win');
             }
         }
@@ -192,7 +192,4 @@ export class Game extends Scene {
         {
             this.scene.start('GameOver');
         }
-}
-
-export class Win {
 }

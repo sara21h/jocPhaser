@@ -44,6 +44,7 @@ export class Preloader extends Scene
         this.load.image('personatge', 'personatge.png');
         this.load.image('foc', 'foc.png');
         this.load.image('bgGameOver', 'bgGameOver.png');
+        this.load.image('bgWin', 'bgWin.png');
 
     }
 
