@@ -5,60 +5,72 @@ export class Game extends Scene {
         super('Game');
     }
 
-    create() {
-        // Crea un TileSprite con el tamaño del mundo del juego
-        this.score = 0;
-        this.life = 3;
-        this.bg = this.add.tileSprite(0, 0, this.scale.width * 2, this.scale.height, 'bgJoc');
-        this.scoreText = this.add.text(20, 150, 'Puntuación:' + this.score);
-        this.lifeText = this.add.text(20, 100, 'Vida:' + this.life);
-        this.bg.setOrigin(0, 0); // Asegúrate de que el origen esté en la esquina superior izquierda
-        // Añade el jugador después del fondo
-        this.player = this.add.image(70, 500, 'personatge').setScale(0.3);
-        this.player.setOrigin(0, 0);
-        this.scoreText.setScrollFactor(0);
-        this.lifeText.setScrollFactor(0);
-        this.cursors = this.input.keyboard.createCursorKeys();
-        // Declara las variables fuera del método create()
-        this.isOnGround = true;
-        this.hasJumped = false;
-        this.jumpSpeed = 60; // Ajusta la velocidad de salto
-        this.canJump = true; // Nueva variable para controlar el tiempo de espera antes de saltar
-
-        // Configura la cámara para seguir al jugador
-        this.cameras.main.startFollow(this.player, true, 0.05, 0.01, 0, 100);
-
-        const minX = this.player.displayWidth / 2 + 50; // La mitad del ancho del jugador desde el borde izquierdo
-        const minXfoc = this.player.displayWidth / 2 + 200; // La mitad del ancho del jugador desde el borde izquierdo
-        const maxX = this.bg.width - this.player.displayWidth / 2 - 300; // El ancho del fondo menos la mitad del ancho del jugador desde el borde derecho
-        this.stars = [];
-
-        //this.cameras.main.setDeadzone(this.cameras.main.width / 2, 0);
-        for (let i = 0; i < 6; i++) {
-            let x = Phaser.Math.Between(minX, maxX);
-            let y = Phaser.Math.Between(0, 1) === 0 ? 475 : 570;
-            let star = this.add.image(x, y, 'estrella').setScale(0.2);
-            star.setOrigin(0.5, 0.5);
-
-            // Añade la estrella al array this.stars
-            this.stars.push(star);
-            //star.setCircle(star.displayWidth / 4); // Define el área de colisión como un círculo
-            //this.stars.add(star); // Agrega la estrella al grupo de estrellas
+        create() {
+            // Crea un TileSprite con el tamaño del mundo del juego
+            this.score = 0;
+            this.life = 3;
+            this.bg = this.add.tileSprite(0, 0, this.scale.width * 2, this.scale.height, 'bgJoc');
+            this.scoreText = this.add.text(20, 150, 'Puntuació:' + this.score);
+            this.lifeText = this.add.text(20, 100, 'Vida:' + this.life);
+            this.bg.setOrigin(0, 0); // Asegúrate de que el origen esté en la esquina superior izquierda
+    
+            // Añade el jugador después del fondo
+            this.player = this.add.image(70, 500, 'personatge').setScale(0.3);
+            this.player.setOrigin(0, 0);
+            this.scoreText.setScrollFactor(0);
+            this.lifeText.setScrollFactor(0);
+            this.cursors = this.input.keyboard.createCursorKeys();
+    
+            // Declara las variables fuera del método create()
+            this.isOnGround = true;
+            this.hasJumped = false;
+            this.jumpSpeed = 60; // Ajusta la velocidad de salto
+            this.canJump = true; // Nueva variable para controlar el tiempo de espera antes de saltar
+    
+            // Configura la cámara para seguir al jugador
+            this.cameras.main.startFollow(this.player, true, 0.05, 0.01, 0, 100);
+    
+            const minX = this.player.displayWidth / 2 + 50; // La mitad del ancho del jugador desde el borde izquierdo
+            const minXfoc = this.player.displayWidth / 2 + 200; // La mitad del ancho del jugador desde el borde izquierdo
+            const maxX = this.bg.width - this.player.displayWidth / 2 - 300; // El ancho del fondo menos la mitad del ancho del jugador desde el borde derecho
+            this.stars = [];
+    
+            //this.cameras.main.setDeadzone(this.cameras.main.width / 2, 0);
+            for (let i = 0; i < 6; i++) {
+                let x = Phaser.Math.Between(minX, maxX);
+                let y = Phaser.Math.Between(0, 1) === 0 ? 475 : 570;
+                let star = this.add.image(x, y, 'estrella').setScale(0.2);
+                star.setOrigin(0.5, 0.5);
+    
+                // Añade la estrella al array this.stars
+                this.stars.push(star);
+                //star.setCircle(star.displayWidth / 4); // Define el área de colisión como un círculo
+                //this.stars.add(star); // Agrega la estrella al grupo de estrellas
+            }
+    
+            this.focs = [];
+    
+            for (let i = 0; i < 4; i++) {
+                let x, positionTaken;
+                let y = 570;
+                do {
+                    x = Phaser.Math.Between(minXfoc, maxX);
+                    positionTaken = this.stars.some(star => {
+                        const distanceX = Math.abs(star.x - x);
+                        const distanceY = Math.abs(star.y - y);
+                        return distanceX < 50 && distanceY < 50; // Ajusta este valor según sea necesario
+                    });
+                } while (positionTaken);
+    
+                let foc = this.add.image(x, y, 'foc').setScale(0.1);
+                foc.setOrigin(0.5, 0.5);
+    
+                // Añade el foc al array this.focs
+                this.focs.push(foc);
+                //foc.setCircle(foc.displayWidth / 4); // Define el área de colisión como un círculo
+                //this.stars.add(foc); // Agrega el foc al grupo de focs
+            }
         }
-        this.focs = [];
-        
-        for (let i = 0; i < 2; i++) {
-            let x = Phaser.Math.Between(minXfoc, maxX);
-            let y = Phaser.Math.Between(0, 1) === 0 ? 475 : 570;
-            let foc = this.add.image(x, y, 'foc').setScale(0.1);
-            foc.setOrigin(0.5, 0.5);
-
-            // Añade la estrella al array this.stars
-            this.focs.push(foc);
-            //star.setCircle(star.displayWidth / 4); // Define el área de colisión como un círculo
-            //this.stars.add(star); // Agrega la estrella al grupo de estrellas
-        }
-    }
         update()
         {
             const speed = 5;
@@ -103,10 +115,38 @@ export class Game extends Scene {
                     i--;
                 }
             }
+            for (let i = 0; i < this.focs.length; i++) {
+                let foc = this.focs[i];
+
+                // Calcula la distancia entre el centro del jugador y el centro de la estrella
+                const distanceX = Math.abs(this.player.x + this.player.displayWidth / 2 - (foc.x + foc.displayWidth / 2));
+                const distanceY = Math.abs(this.player.y + this.player.displayHeight / 2 - (foc.y + foc.displayHeight / 2));
+
+                // Calcula la distancia mínima permitida para eliminar la estrella
+                const minDistance = 50; // Puedes ajustar este valor según sea necesario
+
+                // Comprueba si la distancia es menor que la distancia mínima permitida
+                if (distanceX < minDistance && distanceY < minDistance) {
+                    // Elimina la estrella
+                    foc.destroy();
+                    this.collectFoc();
+                    // Elimina la estrella del array
+                    this.focs.splice(i, 1);
+                    // Reduce el índice ya que hemos eliminado un elemento del array
+                    i--;
+                }
+            }
         }
         collectStar() {
             this.score++; // Incrementa la puntuación
             this.scoreText.setText('Puntuació: ' + this.score); // Actualiza el texto de la puntuación
+        }
+        collectFoc() {
+            this.life--; // Incrementa la puntuación
+            this.lifeText.setText('Vida: ' + this.life); // Actualiza el texto de la puntuación
+            if (this.life === 0) {
+                this.changeScene();
+            }
         }
         jump()
         {
