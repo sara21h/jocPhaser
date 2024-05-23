@@ -9,16 +9,25 @@ export class Game extends Scene {
             // Crea un TileSprite con el tamaño del mundo del juego
             this.score = 0;
             this.life = 3;
+            this.timeLeft = 5;
             this.bg = this.add.tileSprite(0, 0, this.scale.width * 2, this.scale.height, 'bgJoc');
             this.scoreText = this.add.text(20, 150, 'Puntuació:' + this.score);
+            this.timeText = this.add.text(this.scale.width - 120, 100, 'Temps: ' + this.timeLeft); // Ajusta la posición del tiempo
             this.lifeText = this.add.text(20, 100, 'Vida:' + this.life);
             this.bg.setOrigin(0, 0); // Asegúrate de que el origen esté en la esquina superior izquierda
-    
+            
+            this.time.addEvent({
+                delay: 1000, // 1 segundo
+                callback: this.updateTimer,
+                callbackScope: this,
+                loop: true
+            });
             // Añade el jugador después del fondo
             this.player = this.add.image(70, 500, 'personatge').setScale(0.3);
             this.player.setOrigin(0, 0);
             this.scoreText.setScrollFactor(0);
             this.lifeText.setScrollFactor(0);
+            this.timeText.setScrollFactor(0);
             this.cursors = this.input.keyboard.createCursorKeys();
     
             // Declara las variables fuera del método create()
@@ -69,6 +78,17 @@ export class Game extends Scene {
                 this.focs.push(foc);
                 //foc.setCircle(foc.displayWidth / 4); // Define el área de colisión como un círculo
                 //this.stars.add(foc); // Agrega el foc al grupo de focs
+            }
+        }
+        updateTimer() {
+            this.timeLeft--;
+            this.timeText.setText('Tiempo: ' + this.timeLeft);
+    
+            if (this.timeLeft <= 0 && this.score < 4) {
+                this.changeScene();
+            }
+            else if (this.timeLeft <= 0 && this.score >= 4) {
+                this.scene.start('Win');
             }
         }
         update()
@@ -172,4 +192,7 @@ export class Game extends Scene {
         {
             this.scene.start('GameOver');
         }
+}
+
+export class Win {
 }
