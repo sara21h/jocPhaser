@@ -168,20 +168,41 @@ export class Game extends Scene {
         collectStar() {
             this.score++; // Incrementa la puntuación
             this.scoreText.setText('Puntuació: ' + this.score); // Actualiza el texto de la puntuación
-        }
-        collectFoc() {
-            this.life--; // Incrementa la puntuación
-            this.lifeText.setText('Vida: ' + this.life); // Actualiza el texto de la puntuación
-            this.player.setTint(0xff0000);
+            const plusOneText = this.add.text(this.player.x, this.player.y + 50, '+1', {
+                font: '20px Arial',
+                fill: '#77FF5B'
+            }).setOrigin(0.5, 0.5);
 
-            // Después de 1 segundo, remueve el efecto rojo
+            // Después de 1 segundo, remueve el efecto rojo y destruye el texto "-1"
             this.time.delayedCall(1000, () => {
                 this.player.clearTint();
+                plusOneText.destroy();
             });
+        }
+        collectFoc() {
+            this.life--; // Decrementa la vida
+            this.lifeText.setText('Vida: ' + this.life); // Actualiza el texto de la vida
+    
+            // Aplica un efecto rojo al jugador
+            this.player.setTint(0xff0000);
+    
+            // Crea el texto "-1" sobre el jugador
+            const minusOneText = this.add.text(this.player.x, this.player.y + 50, '-1', {
+                font: '20px Arial',
+                fill: '#ff0000'
+            }).setOrigin(0.5, 0.5);
+    
+            // Después de 1 segundo, remueve el efecto rojo y destruye el texto "-1"
+            this.time.delayedCall(1000, () => {
+                this.player.clearTint();
+                minusOneText.destroy();
+            });
+    
             if (this.life === 0) {
                 this.changeScene();
             }
         }
+
         jump()
         {
             this.player.y -= this.jumpSpeed; // Hace que el jugador suba más rápido
