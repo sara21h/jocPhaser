@@ -8,13 +8,16 @@ export class Game extends Scene {
     create() {
         // Crea un TileSprite con el tamaño del mundo del juego
         this.score = 0;
+        this.life = 3;
         this.bg = this.add.tileSprite(0, 0, this.scale.width * 2, this.scale.height, 'bgJoc');
-        this.scoreText = this.add.text(80, 200, 'Puntuación:' + this.score);
+        this.scoreText = this.add.text(20, 150, 'Puntuación:' + this.score);
+        this.lifeText = this.add.text(20, 100, 'Vida:' + this.life);
         this.bg.setOrigin(0, 0); // Asegúrate de que el origen esté en la esquina superior izquierda
         // Añade el jugador después del fondo
         this.player = this.add.image(70, 500, 'personatge').setScale(0.3);
         this.player.setOrigin(0, 0);
         this.scoreText.setScrollFactor(0);
+        this.lifeText.setScrollFactor(0);
         this.cursors = this.input.keyboard.createCursorKeys();
         // Declara las variables fuera del método create()
         this.isOnGround = true;
