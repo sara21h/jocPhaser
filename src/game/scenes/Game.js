@@ -29,6 +29,7 @@ export class Game extends Scene {
         this.cameras.main.startFollow(this.player, true, 0.05, 0.01, 0, 100);
 
         const minX = this.player.displayWidth / 2 + 50; // La mitad del ancho del jugador desde el borde izquierdo
+        const minXfoc = this.player.displayWidth / 2 + 200; // La mitad del ancho del jugador desde el borde izquierdo
         const maxX = this.bg.width - this.player.displayWidth / 2 - 300; // El ancho del fondo menos la mitad del ancho del jugador desde el borde derecho
         this.stars = [];
 
@@ -41,6 +42,19 @@ export class Game extends Scene {
 
             // Añade la estrella al array this.stars
             this.stars.push(star);
+            //star.setCircle(star.displayWidth / 4); // Define el área de colisión como un círculo
+            //this.stars.add(star); // Agrega la estrella al grupo de estrellas
+        }
+        this.focs = [];
+        
+        for (let i = 0; i < 2; i++) {
+            let x = Phaser.Math.Between(minXfoc, maxX);
+            let y = Phaser.Math.Between(0, 1) === 0 ? 475 : 570;
+            let foc = this.add.image(x, y, 'foc').setScale(0.1);
+            foc.setOrigin(0.5, 0.5);
+
+            // Añade la estrella al array this.stars
+            this.focs.push(foc);
             //star.setCircle(star.displayWidth / 4); // Define el área de colisión como un círculo
             //this.stars.add(star); // Agrega la estrella al grupo de estrellas
         }
