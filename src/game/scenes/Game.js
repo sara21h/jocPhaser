@@ -11,10 +11,10 @@ export class Game extends Scene {
             this.playerMoved = false;
             this.life = 3;
             this.timeLeft = 20;
-            this.bg = this.add.tileSprite(0, 0, this.scale.width * 4, this.scale.height, 'bgJoc');
-            this.scoreText = this.add.text(20, 150, 'Puntuació:' + this.score);
+            this.bg = this.add.tileSprite(50, 0, this.scale.width * 4, this.scale.height, 'bgJoc');
+            this.scoreText = this.add.text(70, 150, 'Puntuació:' + this.score);
             this.timeText = this.add.text(this.scale.width - 120, 100, 'Temps: ' + this.timeLeft); // Ajusta la posición del tiempo
-            this.lifeText = this.add.text(20, 100, 'Vida:' + this.life);
+            this.lifeText = this.add.text(70, 100, 'Vida:' + this.life);
             this.bg.setOrigin(0, 0); // Asegúrate de que el origen esté en la esquina superior izquierda
             
           
@@ -33,14 +33,15 @@ export class Game extends Scene {
             this.canJump = true; // Nueva variable para controlar el tiempo de espera antes de saltar
     
             // Configura la cámara para seguir al jugador
-            this.cameras.main.startFollow(this.player, true, 0.05, 0.01, 0, 100);
-    
+            this.cameras.main.startFollow(this.player, true, 0.05, 0.01);
+            this.cameras.main.setBounds(0, 0, this.bg.width, this.bg.height);
+            this.cameras.main.centerOn(this.player.x, this.player.y);
             const minX = this.player.displayWidth / 2 + 200; // La mitad del ancho del jugador desde el borde izquierdo
              // La mitad del ancho del jugador desde el borde izquierdo
             const maxX = this.bg.width - this.player.displayWidth / 2 - 300; // El ancho del fondo menos la mitad del ancho del jugador desde el borde derecho
             this.stars = [];
     
-            //this.cameras.main.setDeadzone(this.cameras.main.width / 2, 0);
+           // this.cameras.main.setDeadzone(this.cameras.main.width / 2, 0);
             for (let i = 0; i < 10; i++) {
                 let x = Phaser.Math.Between(minX, maxX);
                 let y = Phaser.Math.Between(0, 1) === 0 ? 475 : 570;
@@ -84,7 +85,7 @@ export class Game extends Scene {
                 this.changeScene();
             }
             else if (this.timeLeft <= 0 && this.score >= 10) {
-                this.scene.start('Info');
+                this.scene.start('Win');
             }
         }
         update()
