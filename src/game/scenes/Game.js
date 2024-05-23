@@ -8,6 +8,7 @@ export class Game extends Scene {
         create() {
             // Crea un TileSprite con el tamaño del mundo del juego
             this.score = 0;
+            this.playerMoved = false;
             this.life = 3;
             this.timeLeft = 20;
             this.bg = this.add.tileSprite(0, 0, this.scale.width * 4, this.scale.height, 'bgJoc');
@@ -16,12 +17,7 @@ export class Game extends Scene {
             this.lifeText = this.add.text(20, 100, 'Vida:' + this.life);
             this.bg.setOrigin(0, 0); // Asegúrate de que el origen esté en la esquina superior izquierda
             
-            this.time.addEvent({
-                delay: 1000, // 1 segundo
-                callback: this.updateTimer,
-                callbackScope: this,
-                loop: true
-            });
+          
             // Añade el jugador después del fondo
             this.player = this.add.image(70, 500, 'personatge').setScale(0.3);
             this.player.setOrigin(0, 0);
@@ -39,8 +35,8 @@ export class Game extends Scene {
             // Configura la cámara para seguir al jugador
             this.cameras.main.startFollow(this.player, true, 0.05, 0.01, 0, 100);
     
-            const minX = this.player.displayWidth / 2 + 50; // La mitad del ancho del jugador desde el borde izquierdo
-            const minXfoc = this.player.displayWidth / 2 + 200; // La mitad del ancho del jugador desde el borde izquierdo
+            const minX = this.player.displayWidth / 2 + 200; // La mitad del ancho del jugador desde el borde izquierdo
+             // La mitad del ancho del jugador desde el borde izquierdo
             const maxX = this.bg.width - this.player.displayWidth / 2 - 300; // El ancho del fondo menos la mitad del ancho del jugador desde el borde derecho
             this.stars = [];
     
@@ -63,7 +59,7 @@ export class Game extends Scene {
                 let x, positionTaken;
                 let y = 570;
                 do {
-                    x = Phaser.Math.Between(minXfoc, maxX);
+                    x = Phaser.Math.Between(minX, maxX);
                     positionTaken = this.stars.some(star => {
                         const distanceX = Math.abs(star.x - x);
                         const distanceY = Math.abs(star.y - y);
@@ -88,7 +84,7 @@ export class Game extends Scene {
                 this.changeScene();
             }
             else if (this.timeLeft <= 0 && this.score >= 10) {
-                this.scene.start('Win');
+                this.scene.start('Info');
             }
         }
         update()
@@ -98,13 +94,16 @@ export class Game extends Scene {
             const playerWidth = this.player.displayWidth; // Obtiene el ancho del jugador
             if (this.cursors.left.isDown && this.player.x - playerWidth / 20 > margin) { // Asegúrate de que el jugador no se salga por la izquierda
                 this.player.x -= speed;
+                this.playerMoved = true;
             } else if (this.cursors.right.isDown && this.player.x + playerWidth / 2 < this.bg.width - margin) { // Asegúrate de que el jugador no se salga por la derecha
                 this.player.x += speed;
+                this.playerMoved = true;
             }
             // Comprueba si el jugador está en el suelo y permite el salto
             if (this.cursors.up.isDown && this.player.y > margin && this.isOnGround && !this.hasJumped && this.canJump) {
                 // Realiza el salto
                 this.jump();
+                this.playerMoved = true;
             }
             // Comprueba si el jugador está en el aire y permite que vuelva a tocar el suelo
             if (this.player.y < 500) { // Cambia 600 por la posición y del suelo
@@ -134,6 +133,14 @@ export class Game extends Scene {
                     // Reduce el índice ya que hemos eliminado un elemento del array
                     i--;
                 }
+            }
+            if (this.playerMoved && !this.timeEvent) {
+                this.timeEvent = this.time.addEvent({
+                    delay: 1000, // 1 segundo
+                    callback: this.updateTimer,
+                    callbackScope: this,
+                    loop: true
+                });
             }
             for (let i = 0; i < this.focs.length; i++) {
                 let foc = this.focs[i];
