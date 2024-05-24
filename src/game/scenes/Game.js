@@ -5,6 +5,10 @@ export class Game extends Scene {
     constructor() {
         super('Game');
     }
+    preload() {
+        // Carga el archivo de música en la escena del juego
+        this.load.audio('backgroundMusic', 'assets/music.mp3');
+    }
 
     create() {
         this.score = 0;
@@ -12,7 +16,8 @@ export class Game extends Scene {
         this.life = 3;
         this.timeLeft = 20;
         this.bg = this.add.tileSprite(50, 0, this.scale.width * 4, this.scale.height, 'bgJoc');
-
+        let music = this.sound.add('backgroundMusic');
+        music.play({ loop: true });
         // Temporizador para cambiar el fondo cada cierto tiempo
         this.time.addEvent({
             delay: 5000, // Cambia cada 5 segundos (5000 milisegundos)
