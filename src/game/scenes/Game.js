@@ -6,11 +6,21 @@ export class Game extends Scene {
         super('Game');
     }
     preload() {
-        // Carga el archivo de música en la escena del juego
         this.load.audio('backgroundMusic', 'assets/music.mp3');
     }
 
     create() {
+        WebFont.load({
+            google: {
+                families: ['Itim']
+            },
+            active: () => {
+                let tornarPartida = this.add.text(150, 490, 'Meta: 10 estrelles', {
+                    fontFamily: 'Itim', fontSize: 20, color: '#FFFFFF',
+                    align: 'center'
+                }).setDepth(100).setOrigin(0.5);
+            }
+        });
         this.score = 0;
         this.playerMoved = false;
         this.life = 3;
